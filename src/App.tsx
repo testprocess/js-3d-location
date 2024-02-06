@@ -10,8 +10,8 @@ const headerStyle = css({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  backgroundColor: "#0e0e1a",
-  height: "100vh",
+  backgroundColor: "#101012",
+  height: "100%",
   width: "100%",
 });
 
@@ -87,7 +87,7 @@ function Motion() {
           })}
           onClick={handleButtonClick}
         >
-          enalble
+          Enable
         </button>
       )}
       {isGranted && (
