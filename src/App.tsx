@@ -29,14 +29,35 @@ function Motion() {
     y: 0,
     z: 0,
   });
+  const [velocity, setVelocity] = useState({
+    x: 0,
+    y: 0,
+    z: 0,
+  });
+  const [location, setLocation] = useState({
+    x: 0,
+    y: 0,
+    z: 0,
+  });
+  const [rotation, setRotation] = useState({
+    x: 0,
+    y: 0,
+    z: 0,
+  });
   const [isGranted, setIsGranted] = useState(false);
 
   const onDevicemotion = (event: any) => {
-    console.log(event);
     setAcceleration({
       x: event.acceleration.x,
       y: event.acceleration.y,
       z: event.acceleration.z,
+    });
+  };
+  const onDeviceRotation = (event: any) => {
+    setRotation({
+      x: event.alpha,
+      y: event.beta,
+      z: event.gamma,
     });
   };
 
@@ -53,6 +74,7 @@ function Motion() {
           if (state === "granted") {
             setIsGranted(true);
             window.addEventListener("devicemotion", onDevicemotion);
+            window.addEventListener("deviceorientation", onDeviceRotation);
           }
         })
         .catch((e: any) => {
@@ -63,7 +85,34 @@ function Motion() {
     }
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const dt = 0.02;
+
+    const x = velocity.x * dt + location.x;
+    const y = velocity.y * dt + location.y;
+    const z = velocity.z * dt + location.z;
+
+    setLocation({
+      x: x,
+      y: y,
+      z: z,
+    });
+  }, [velocity]);
+
+  useEffect(() => {
+    const dt = 0.02;
+
+    const vx = Number(acceleration.x.toFixed(0)) * dt + velocity.x;
+    const vy = Number(acceleration.y.toFixed(0)) * dt + velocity.y;
+    const vz = Number(acceleration.z.toFixed(0)) * dt + velocity.z;
+
+    setVelocity({
+      x: vx,
+      y: vy,
+      z: vz,
+    });
+  }, [acceleration]);
+
   return (
     <p css={css({ color: "#ffffff" })}>
       {" "}
@@ -92,9 +141,31 @@ function Motion() {
       )}
       {isGranted && (
         <>
-          <p>x: {acceleration.x}</p>
-          <p>y: {acceleration.y}</p>
-          <p>z: {acceleration.z}</p>
+          <p>acceleration:</p>
+          <p>x: {acceleration.x.toFixed(0)}</p>
+          <p>y: {acceleration.y.toFixed(0)}</p>
+          <p>z: {acceleration.z.toFixed(0)}</p>
+
+          <hr />
+          <p>rotation:</p>
+
+          <p>x: {rotation.x.toFixed(4)}</p>
+          <p>y: {rotation.y.toFixed(4)}</p>
+          <p>z: {rotation.z.toFixed(4)}</p>
+
+          <hr />
+          <p>loc:</p>
+
+          <p>x: {location.x.toFixed(4)}</p>
+          <p>y: {location.y.toFixed(4)}</p>
+          <p>z: {location.z.toFixed(4)}</p>
+
+          <hr />
+          <p>vel:</p>
+
+          <p>x: {velocity.x.toFixed(4)}</p>
+          <p>y: {velocity.y.toFixed(4)}</p>
+          <p>z: {velocity.z.toFixed(4)}</p>
         </>
       )}
     </p>
