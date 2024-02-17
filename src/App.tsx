@@ -6,21 +6,8 @@ import React, { useEffect, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
-const headerStyle = css({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  backgroundColor: "#101012",
-  height: "100%",
-  width: "100%",
-});
-
 function App() {
-  return (
-    <div css={headerStyle}>
-      <Motion></Motion>
-    </div>
-  );
+  return <Motion></Motion>;
 }
 
 function Motion() {
@@ -114,61 +101,84 @@ function Motion() {
   }, [acceleration]);
 
   return (
-    <p css={css({ color: "#ffffff" })}>
-      {" "}
-      {!isGranted && (
-        <button
-          css={css({
-            backgroundColor: "#25252b",
-            color: "#ffffff",
-            border: "none",
-            width: "100%",
-            borderRadius: "0.6rem",
-            padding: "0.6rem 1.4rem",
-            fontSize: "0.8rem",
-            fontWeight: 400,
-            fontFamily: "'Noto Sans KR', sans-serif",
-            transition: "0.2s",
-            cursor: "pointer",
-            ":hover": {
-              backgroundColor: "#15151a",
-            },
-          })}
-          onClick={handleButtonClick}
-        >
-          Enable
-        </button>
-      )}
-      {isGranted && (
-        <>
-          <p>acceleration:</p>
-          <p>x: {acceleration.x.toFixed(0)}</p>
-          <p>y: {acceleration.y.toFixed(0)}</p>
-          <p>z: {acceleration.z.toFixed(0)}</p>
+    <>
+      <div
+        css={css({
+          position: "absolute",
+          left: 0,
+          top: 0,
+          display: isGranted ? "none" : "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#101012",
+          height: "100%",
+          width: "100%",
+        })}
+      >
+        <p>
+          <button
+            css={css({
+              backgroundColor: "#25252b",
+              color: "#ffffff",
+              border: "none",
+              width: "100%",
+              borderRadius: "0.6rem",
+              padding: "0.6rem 1.4rem",
+              fontSize: "0.8rem",
+              fontWeight: 400,
+              fontFamily: "'Noto Sans KR', sans-serif",
+              transition: "0.2s",
+              cursor: "pointer",
+              ":hover": {
+                backgroundColor: "#15151a",
+              },
+            })}
+            onClick={handleButtonClick}
+          >
+            Enable
+          </button>
+        </p>
+      </div>
 
-          <hr />
-          <p>rotation:</p>
-
-          <p>x: {rotation.x.toFixed(4)}</p>
-          <p>y: {rotation.y.toFixed(4)}</p>
-          <p>z: {rotation.z.toFixed(4)}</p>
-
-          <hr />
-          <p>loc:</p>
-
-          <p>x: {location.x.toFixed(4)}</p>
-          <p>y: {location.y.toFixed(4)}</p>
-          <p>z: {location.z.toFixed(4)}</p>
-
-          <hr />
-          <p>vel:</p>
-
-          <p>x: {velocity.x.toFixed(4)}</p>
-          <p>y: {velocity.y.toFixed(4)}</p>
-          <p>z: {velocity.z.toFixed(4)}</p>
-        </>
-      )}
-    </p>
+      <div
+        css={css({
+          position: "absolute",
+          left: 0,
+          top: 0,
+          display: isGranted ? "flex" : "none",
+          justifyContent: "center",
+          alignItems: "center",
+        })}
+      >
+        <p css={css({ color: "#ffffff", fontSize: "0.6rem" })}>
+          {isGranted && (
+            <>
+              <pre>
+                acceleration:
+                <p css={css({ margin: 0 })}>x: {acceleration.x.toFixed(0)}</p>
+                <p css={css({ margin: 0 })}>y: {acceleration.y.toFixed(0)}</p>
+                <p css={css({ margin: 0 })}>z: {acceleration.z.toFixed(0)}</p>
+                <br />
+                velocity:
+                <p css={css({ margin: 0 })}>x: {velocity.x.toFixed(4)}</p>
+                <p css={css({ margin: 0 })}>y: {velocity.y.toFixed(4)}</p>
+                <p css={css({ margin: 0 })}>z: {velocity.z.toFixed(4)}</p>
+                <br />
+                location:
+                <p css={css({ margin: 0 })}>x: {location.x.toFixed(4)}</p>
+                <p css={css({ margin: 0 })}>y: {location.y.toFixed(4)}</p>
+                <p css={css({ margin: 0 })}>z: {location.z.toFixed(4)}</p>
+                <br />
+                rotation:
+                <p css={css({ margin: 0 })}>x: {rotation.x.toFixed(1)}</p>
+                <p css={css({ margin: 0 })}>y: {rotation.y.toFixed(1)}</p>
+                <p css={css({ margin: 0 })}>z: {rotation.z.toFixed(1)}</p>
+              </pre>
+            </>
+          )}
+        </p>
+      </div>
+    </>
   );
 }
 
