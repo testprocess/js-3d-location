@@ -5,6 +5,7 @@ import { css } from "@emotion/react";
 import React, { useEffect, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import { EventConnector } from "./event/EventConnector";
 
 function App() {
   return <Motion></Motion>;
@@ -71,6 +72,26 @@ function Motion() {
       window.addEventListener("devicemotion", onDevicemotion);
     }
   };
+
+  useEffect(() => {
+    const event = new EventConnector();
+
+    event.send("value:rotation", {
+      x: rotation.x,
+      y: rotation.y,
+      z: rotation.z,
+    });
+  }, [rotation]);
+
+  useEffect(() => {
+    const event = new EventConnector();
+
+    event.send("value:location", {
+      x: location.x,
+      y: location.y,
+      z: location.z,
+    });
+  }, [location]);
 
   useEffect(() => {
     const dt = 0.02;

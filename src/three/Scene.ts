@@ -1,8 +1,35 @@
 import * as THREE from "three";
+import { EventConnector } from "../event/EventConnector";
 
 class Scene {
+  mesh:
+    | THREE.Mesh<
+        THREE.BoxGeometry,
+        THREE.MeshNormalMaterial,
+        THREE.Object3DEventMap
+      >
+    | any;
+  rotation: { x: number; y: number; z: number };
   constructor() {
     this.init();
+    this.rotation = {
+      x: 0,
+      y: 0,
+      z: 0,
+    };
+    const event = new EventConnector();
+    event.receive("value:location", this.getLocation);
+    event.receive("value:rotation", this.getRotation.bind(this));
+  }
+
+  getLocation(e: any) {
+    console.log(e);
+  }
+
+  getRotation(e: any) {
+    this.rotation.x = (e.detail.y * Math.PI) / 180 || 0;
+    this.rotation.y = (e.detail.z * Math.PI) / 180 || 0;
+    this.rotation.z = (e.detail.x * Math.PI) / 180 || 0;
   }
 
   init() {
@@ -17,22 +44,24 @@ class Scene {
     const geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
     const material = new THREE.MeshNormalMaterial();
 
-    const mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
+    this.mesh = new THREE.Mesh(geometry, material);
+    scene.add(this.mesh);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(width, height);
     renderer.xr.enabled = true;
-    renderer.setAnimationLoop(animation);
 
     document.body.appendChild(renderer.domElement);
 
-    function animation(time: number) {
-      mesh.rotation.x = time / 2000;
-      mesh.rotation.y = time / 1000;
+    const animation = (time: number) => {
+      this.mesh.rotation.x = this.rotation.x;
+      this.mesh.rotation.y = this.rotation.y;
+      this.mesh.rotation.z = this.rotation.z;
 
       renderer.render(scene, camera);
-    }
+    };
+
+    renderer.setAnimationLoop(animation);
   }
 }
 
