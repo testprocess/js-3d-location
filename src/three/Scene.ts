@@ -31,7 +31,7 @@ class Scene {
   }
 
   getLocation(e: any) {
-    const devide = 10;
+    const devide = 100;
     this.location.x = e.detail.x / devide;
     this.location.y = e.detail.y / devide;
     this.location.z = e.detail.z / devide;

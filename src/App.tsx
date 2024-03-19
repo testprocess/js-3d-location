@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import { EventConnector } from "./event/EventConnector";
+import { getLocation } from "./math/getLocation";
 
 function App() {
   return <Motion></Motion>;
@@ -27,12 +28,14 @@ function Motion() {
     y: 0,
     z: 0,
   });
+
   const [rotation, setRotation] = useState({
     x: 0,
     y: 0,
     z: 0,
   });
   const [isGranted, setIsGranted] = useState(false);
+  const [data, setData] = useState(new getLocation());
 
   const onDevicemotion = (event: any) => {
     setAcceleration({
@@ -86,38 +89,30 @@ function Motion() {
   useEffect(() => {
     const event = new EventConnector();
 
-    event.send("value:location", {
-      x: location.x,
-      y: location.y,
-      z: location.z,
+    data.setAcceleration({
+      x: acceleration.x,
+      y: acceleration.y,
+      z: acceleration.z,
     });
-  }, [location]);
 
-  useEffect(() => {
-    const dt = 0.02;
-
-    const x = velocity.x * dt + location.x;
-    const y = velocity.y * dt + location.y;
-    const z = velocity.z * dt + location.z;
-
-    setLocation({
-      x: x,
-      y: y,
-      z: z,
-    });
-  }, [velocity]);
-
-  useEffect(() => {
-    const dt = 0.02;
-
-    const vx = Number(acceleration.x.toFixed(0)) * dt + velocity.x;
-    const vy = Number(acceleration.y.toFixed(0)) * dt + velocity.y;
-    const vz = Number(acceleration.z.toFixed(0)) * dt + velocity.z;
+    data.getLocation();
 
     setVelocity({
-      x: vx,
-      y: vy,
-      z: vz,
+      x: data.velocity.x,
+      y: data.velocity.y,
+      z: data.velocity.z,
+    });
+
+    setLocation({
+      x: data.location.x,
+      y: data.location.y,
+      z: data.location.z,
+    });
+
+    event.send("value:location", {
+      x: data.location.x,
+      y: data.location.y,
+      z: data.location.z,
     });
   }, [acceleration]);
 
