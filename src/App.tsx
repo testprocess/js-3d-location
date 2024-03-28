@@ -7,6 +7,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import { EventConnector } from "./event/EventConnector";
 import { getLocation } from "./math/getLocation";
+import { LineGraph } from "./components/Graph";
 
 function App() {
   return <Motion></Motion>;
@@ -18,6 +19,9 @@ function Motion() {
     y: 0,
     z: 0,
   });
+  const [graphData, setGraphData] = useState<
+    { x: number; y: number; z: number }[]
+  >([]);
   const [velocity, setVelocity] = useState({
     x: 0,
     y: 0,
@@ -94,6 +98,11 @@ function Motion() {
       y: acceleration.y,
       z: acceleration.z,
     });
+
+    setGraphData([
+      ...graphData,
+      { x: acceleration.x, y: acceleration.y, z: acceleration.z },
+    ]);
 
     data.getLocation();
 
@@ -190,6 +199,8 @@ function Motion() {
                 <p css={css({ margin: 0 })}>y: {rotation.y.toFixed(1)}</p>
                 <p css={css({ margin: 0 })}>z: {rotation.z.toFixed(1)}</p>
               </pre>
+
+              <LineGraph data={graphData}></LineGraph>
             </>
           )}
         </p>
