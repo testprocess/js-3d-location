@@ -31,6 +31,9 @@ function LineGraph({
 }) {
   const options = {
     responsive: true,
+    animation: {
+      duration: 0,
+    },
     plugins: {
       legend: {
         position: "top" as const,
